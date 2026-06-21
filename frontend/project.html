@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project — ENAULD Technology Health Research and Services</title>
+<link rel="icon" type="image/x-icon" href="public/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="robots" content="noindex">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0B1F3F;
+    --burgundy: #8B1A1A;
+    --burgundy-dark: #6b1414;
+    --ink: #0e1726;
+    --muted: #5b6478;
+    --white: #ffffff;
+    --soft: #f9fafc;
+    --pale: #f4f6fb;
+    --border: #e5e8ef;
+    --border-light: #eef0f5;
+    --serif: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --sans: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  body {
+    background: var(--white);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  a { color: inherit; text-decoration: none; }
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 0 44px;
+    background: rgba(255,255,255,0.94);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .mark {
+    width: 38px; height: 38px; border-radius: 6px;
+    background: var(--navy); color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: 21px; font-weight: 600; flex-shrink: 0;
+  }
+  .brand-title { color: var(--navy); font-size: 16px; font-weight: 800; letter-spacing: 0.08em; line-height: 1.05; }
+  .brand-subtitle { color: var(--muted); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .back-link { color: var(--muted); font-size: 14px; font-weight: 700; }
+  .back-link:hover { color: var(--navy); }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 64px 24px 96px; }
+  .label {
+    display: flex; align-items: center; gap: 10px;
+    color: var(--burgundy); font-size: 12px; font-weight: 800;
+    letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 18px;
+  }
+  .label::before { content: ""; width: 24px; height: 2px; background: var(--burgundy); }
+  h1 { color: var(--navy); font-family: var(--serif); font-weight: 600; font-size: clamp(27px, 3.8vw, 43px); line-height: 1.1; }
+  h2 { color: var(--navy); font-family: var(--serif); font-weight: 600; font-size: 22px; margin-bottom: 14px; }
+  p { color: var(--muted); }
+  .meta-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+    background: var(--border); border: 1px solid var(--border); border-radius: 8px;
+    overflow: hidden; margin: 30px 0 40px;
+  }
+  .meta-item { background: var(--soft); padding: 18px 22px; }
+  .meta-item span { display: block; color: var(--burgundy); font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+  .meta-item strong { color: var(--ink); font-size: 16px; font-weight: 600; }
+  .block { margin-top: 36px; }
+  .lead { font-size: 17px; color: var(--ink); }
+  .activities { list-style: none; display: grid; gap: 12px; }
+  .activities li { display: flex; gap: 10px; color: var(--ink); }
+  .activities li::before { content: "✓"; color: var(--burgundy); font-weight: 800; flex-shrink: 0; }
+  .result-box {
+    margin-top: 20px; background: var(--navy); color: var(--white);
+    border-radius: 8px; padding: 24px 26px;
+  }
+  .result-box span { display: block; color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .media-card { margin-top: 36px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .media-card .media-head { padding: 16px 22px; border-bottom: 1px solid var(--border); }
+  .media-card img, .media-card video, .media-card iframe { display: block; width: 100%; border: 0; }
+  .media-card iframe { aspect-ratio: 16 / 9; height: auto; }
+  .gallery { display: grid; gap: 1px; background: var(--border); }
+  .gallery img { background: var(--soft); }
+  .hidden { display: none; }
+  .notfound { text-align: center; padding: 40px 0; }
+  footer { background: var(--navy); color: rgba(255,255,255,0.74); padding: 30px 24px; text-align: center; font-size: 14px; }
+  @media (max-width: 640px) {
+    .nav { padding: 0 20px; }
+    .brand-subtitle { display: none; }
+    .meta-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="Main navigation">
+  <a class="brand" href="index.html" aria-label="ENAULD home">
+    <div class="mark">E</div>
+    <div>
+      <div class="brand-title">ENAULD</div>
+      <div class="brand-subtitle">Technology Health Research and Services</div>
+    </div>
+  </a>
+  <a class="back-link" href="index.html#track-record">← Back to track record</a>
+</nav>
+
+<main class="wrap" id="project-root">
+  <p class="notfound">Loading…</p>
+</main>
+
+<footer>&copy;2026 ENAULD Technology Health Research and Services</footer>
+
+<script src="projects-data.js"></script>
+<script>
+  (function () {
+    const root = document.getElementById('project-root');
+    const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]
+    ));
+    // Slug is passed in the URL hash (survives clean-URL redirects, file:// and Vercel).
+    // Fall back to the legacy ?id= query param if present.
+    let id = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+    if (!id) id = new URLSearchParams(location.search).get('id') || '';
+    const projects = window.ENAULD_PROJECTS || [];
+    const project = projects.find((p) => p.slug === id);
+
+    if (!project) {
+      root.innerHTML = `
+        <div class="notfound">
+          <h1>Project not found</h1>
+          <p style="margin-top:14px;">We couldn't find that project. <a href="index.html#track-record" style="color:var(--burgundy);font-weight:700;text-decoration:underline;">Return to the track record</a>.</p>
+        </div>`;
+      return;
+    }
+
+    document.title = project.title + ' — ENAULD';
+
+    const metaItems = [
+      ['Period', project.period],
+      ['Location', project.location],
+      ['Client / agency', project.agency],
+      ['Role', project.position]
+    ].filter(([, v]) => v).map(([k, v]) => `
+      <div class="meta-item"><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`).join('');
+
+    const activities = (project.activities || []).map((a) => `<li>${esc(a)}</li>`).join('');
+
+    root.innerHTML = `
+      <div class="label">Track record</div>
+      <h1>${esc(project.title)}</h1>
+      <div class="meta-grid">${metaItems}</div>
+      ${project.description ? `<div class="block"><h2>About the project</h2><p class="lead">${esc(project.description)}</p></div>` : ''}
+      ${activities ? `<div class="block"><h2>What the work involved</h2><ul class="activities">${activities}</ul></div>` : ''}
+      ${project.result ? `<div class="result-box"><span>Result / status</span>${esc(project.result)}</div>` : ''}
+      <div id="image-card" class="media-card hidden">
+        <div class="media-head"><h2 style="margin:0;">Images</h2></div>
+        <div class="gallery" id="image-gallery"></div>
+      </div>
+      <div id="video-card" class="media-card hidden">
+        <div class="media-head"><h2 style="margin:0;">Video</h2></div>
+        <div id="video-holder"></div>
+      </div>`;
+
+    // ---- Image card: reveal only if files exist (image/<slug>.ext, image/<slug>-N.ext) ----
+    const exts = ['jpg', 'jpeg', 'png', 'webp'];
+    const imageCard = document.getElementById('image-card');
+    const gallery = document.getElementById('image-gallery');
+
+    function tryLoad(base) {
+      // resolve to the first existing extension for a given filename base
+      return new Promise((resolve) => {
+        let i = 0;
+        const next = () => {
+          if (i >= exts.length) return resolve(null);
+          const src = `image/${base}.${exts[i++]}`;
+          const im = new Image();
+          im.onload = () => resolve(src);
+          im.onerror = next;
+          im.src = src;
+        };
+        next();
+      });
+    }
+
+    (async function loadImages() {
+      const found = [];
+      const single = await tryLoad(project.slug);
+      if (single) found.push(single);
+      // numbered series: slug-1, slug-2, … stop at first gap
+      for (let n = 1; n <= 12; n++) {
+        const src = await tryLoad(`${project.slug}-${n}`);
+        if (!src) { if (n === 1) continue; else break; }
+        found.push(src);
+      }
+      if (!found.length) return;
+      gallery.innerHTML = found.map((src) =>
+        `<img src="${src}" alt="${esc(project.title)}" loading="lazy">`).join('');
+      imageCard.classList.remove('hidden');
+    })();
+
+    // ---- Video card: YouTube URL from data, or self-hosted video/<slug>.mp4 ----
+    const videoCard = document.getElementById('video-card');
+    const videoHolder = document.getElementById('video-holder');
+
+    function youTubeId(url) {
+      const m = String(url).match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/);
+      return m ? m[1] : null;
+    }
+
+    if (project.videoUrl && youTubeId(project.videoUrl)) {
+      videoHolder.innerHTML =
+        `<iframe src="https://www.youtube.com/embed/${youTubeId(project.videoUrl)}" title="${esc(project.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      videoCard.classList.remove('hidden');
+    } else {
+      const vsrc = `video/${project.slug}.mp4`;
+      fetch(vsrc, { method: 'HEAD' }).then((r) => {
+        if (!r.ok) return;
+        videoHolder.innerHTML =
+          `<video controls preload="metadata"><source src="${vsrc}" type="video/mp4"></video>`;
+        videoCard.classList.remove('hidden');
+      }).catch(() => {});
+    }
+  })();
+</script>
+</body>
+</html>

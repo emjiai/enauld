@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENAULD Technology Health Research and Services</title>
+<link rel="icon" type="image/x-icon" href="public/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="description" content="ENAULD Technology Health Research and Services provides monitoring, evaluation, learning, health research, evidence synthesis, and information management technology services.">
+<meta name="keywords" content="ENAULD, health research, monitoring evaluation learning, MEL, impact evaluation, evidence synthesis, knowledge translation, information management technology">
+<meta name="author" content="ENAULD Technology Health Research and Services">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ENAULD Technology Health Research and Services">
+<meta property="og:description" content="Research, monitoring, evaluation, learning, and technology services for health and development organizations.">
+<meta property="og:site_name" content="ENAULD">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ENAULD Technology Health Research and Services">
+<meta name="twitter:description" content="Research, monitoring, evaluation, learning, and technology services for health and development organizations.">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0B1F3F;
+    --navy-mid: #122a52;
+    --burgundy: #8B1A1A;
+    --burgundy-dark: #6b1414;
+    --ink: #0e1726;
+    --muted: #5b6478;
+    --white: #ffffff;
+    --soft: #f9fafc;
+    --pale: #f4f6fb;
+    --border: #e5e8ef;
+    --border-light: #eef0f5;
+    --success: #18794e;
+    --serif: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --sans: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--white);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+  body.menu-open { overflow: hidden; }
+  a { color: inherit; text-decoration: none; }
+  p a, li a { color: var(--burgundy); text-decoration: underline; text-underline-offset: 3px; }
+  .nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 0 44px;
+    background: rgba(255,255,255,0.94);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .mark {
+    width: 38px;
+    height: 38px;
+    border-radius: 6px;
+    background: var(--navy);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-size: 21px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .brand-title { color: var(--navy); font-size: 16px; font-weight: 800; letter-spacing: 0.08em; line-height: 1.05; }
+  .brand-subtitle {
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 240px;
+  }
+  .nav-links { display: flex; align-items: center; gap: 22px; }
+  .nav-links a { color: var(--muted); font-size: 14px; font-weight: 700; }
+  .nav-links a:hover { color: var(--navy); }
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    background: var(--burgundy);
+    color: var(--white);
+    padding: 14px 20px;
+    border-radius: 6px;
+    border: 0;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .button:hover { background: var(--burgundy-dark); }
+  .button.secondary {
+    background: var(--white);
+    color: var(--navy);
+    border: 1px solid var(--border);
+  }
+  .button.secondary:hover { background: var(--pale); }
+  .menu-button { display: none; align-items: center; justify-content: center; width: 42px; height: 42px; padding: 0; }
+  .menu-icon { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; fill: none; }
+  .menu-button .icon-close { display: none; }
+  body.menu-open .menu-button .icon-open { display: none; }
+  body.menu-open .menu-button .icon-close { display: block; }
+  .mobile-menu { display: none; }
+  .section { padding: 104px 48px; }
+  .container { max-width: 1180px; margin: 0 auto; }
+  .label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--burgundy);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .label::before { content: ""; width: 24px; height: 2px; background: var(--burgundy); }
+  h1, h2, h3 { color: var(--navy); }
+  h1, h2 { font-family: var(--serif); font-weight: 600; letter-spacing: 0; }
+  h1 { font-size: clamp(27px, 3.8vw, 43px); line-height: 1.1; max-width: 880px; }
+  h2 { font-size: clamp(21px, 2.5vw, 31px); line-height: 1.2; }
+  h3 { font-size: 21px; line-height: 1.25; }
+  p { color: var(--muted); }
+  .hero {
+    padding: 154px 48px 110px;
+    background: linear-gradient(180deg, #ffffff 0%, #f9fafc 100%);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 72px;
+    align-items: center;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--burgundy);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .eyebrow-dot { width: 8px; height: 8px; border-radius: 99px; background: var(--success); }
+  .hero-copy { max-width: 720px; margin-top: 26px; font-size: 19px; line-height: 1.75; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 34px; }
+  .stats-card {
+    background: var(--navy);
+    color: var(--white);
+    border-radius: 8px;
+    padding: 34px;
+    box-shadow: 0 24px 70px rgba(11,31,63,0.18);
+  }
+  .stat {
+    display: grid;
+    grid-template-columns: 112px 1fr;
+    gap: 18px;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.14);
+  }
+  .stat:last-child { border-bottom: 0; }
+  .stat-value { color: var(--white); font-family: var(--serif); font-size: 38px; line-height: 1; }
+  .stat-label { color: rgba(255,255,255,0.78); font-size: 14px; }
+  .about-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 360px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 28px;
+  }
+  .team-photo {
+    display: block;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 24px;
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 72px;
+    align-items: start;
+  }
+  .lead { font-size: 17px; margin-bottom: 20px; }
+  .feature-grid {
+    margin-top: 54px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .feature { background: var(--soft); padding: 30px; }
+  .feature h3 { margin-bottom: 10px; }
+  .soft { background: var(--soft); }
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  .section-head h2 { max-width: 640px; }
+  .section-head p { max-width: 430px; font-size: 17px; }
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 34px;
+  }
+  .icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: var(--pale);
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 22px;
+  }
+  .card h3 {
+    font-family: var(--serif);
+    font-size: 32px;
+    line-height: 1.05;
+    margin-bottom: 12px;
+  }
+  .card p { margin-bottom: 22px; }
+  .check-list { list-style: none; display: grid; gap: 12px; }
+  .check-list li { display: flex; gap: 10px; color: var(--ink); }
+  .check-list li::before { content: "✓"; color: var(--burgundy); font-weight: 800; flex-shrink: 0; }
+  .team-card {
+    background: var(--navy);
+    color: var(--white);
+    border-radius: 8px;
+    padding: 36px;
+    position: sticky;
+    top: 100px;
+  }
+  .team-card .label { color: var(--white); opacity: 0.75; }
+  .team-card .label::before { background: var(--white); }
+  .team-card h2 { color: var(--white); margin-bottom: 16px; }
+  .team-card p, .team-card li { color: rgba(255,255,255,0.82); }
+  .mini-list { display: grid; gap: 12px; margin-top: 20px; list-style: none; }
+  .mini-list li::before { content: "✓ "; }
+  .info-block { border-top: 1px solid var(--border); padding-top: 22px; margin-top: 22px; }
+  .info-block h3 { margin-bottom: 12px; font-size: 18px; }
+  .info-block ul { display: grid; gap: 8px; padding-left: 18px; color: var(--muted); }
+  .track-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    align-content: start;
+    max-height: 640px;
+    overflow-y: auto;
+    padding-right: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted) var(--soft);
+  }
+  .track-grid::-webkit-scrollbar { width: 10px; }
+  .track-grid::-webkit-scrollbar-track { background: var(--soft); }
+  .track-grid::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 8px; border: 2px solid var(--soft); }
+  .project {
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+    color: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  }
+  a.project { cursor: pointer; }
+  a.project:hover {
+    border-color: var(--navy);
+    box-shadow: 0 14px 40px rgba(11,31,63,0.12);
+    transform: translateY(-2px);
+  }
+  .project-meta {
+    color: var(--burgundy);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .project h3 { margin-bottom: 10px; }
+  .project p { flex: 1; }
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    color: var(--burgundy);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+  a.project:hover .project-link { gap: 10px; }
+  .highlight {
+    margin-top: 28px;
+    background: var(--navy);
+    color: var(--white);
+    border-radius: 8px;
+    padding: 32px;
+  }
+  .highlight h3 { color: var(--white); font-family: var(--serif); font-size: 30px; margin-bottom: 14px; }
+  .highlight ul { display: grid; gap: 10px; padding-left: 18px; color: rgba(255,255,255,0.82); }
+  .gallery-section { padding-top: 72px; padding-bottom: 72px; }
+  .gallery-carousel { display: flex; align-items: center; gap: 12px; }
+  .gallery-viewport { overflow: hidden; flex: 1; }
+  .gallery-track {
+    display: flex;
+    gap: 12px;
+    will-change: transform;
+  }
+  .gallery-track img {
+    flex: 0 0 calc((100% - 60px) / 6);
+    height: 130px;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+    user-select: none;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .gallery-track img:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(11,31,63,0.18); }
+  .gallery-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    background: rgba(8,12,24,0.82);
+    backdrop-filter: blur(4px);
+  }
+  .gallery-modal.open { display: flex; }
+  .gallery-modal-figure {
+    max-width: 880px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .gallery-modal-figure img {
+    width: 100%;
+    max-height: 72vh;
+    object-fit: contain;
+    background: #0e1726;
+    display: block;
+  }
+  .gallery-modal-figure figcaption {
+    padding: 20px 24px;
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .gallery-modal-figure figcaption:empty { display: none; }
+  .gallery-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.14);
+    color: var(--white);
+    cursor: pointer;
+  }
+  .gallery-modal-close:hover { background: rgba(255,255,255,0.26); }
+  .gallery-modal-close svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+  .gallery-arrow {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--navy);
+    cursor: pointer;
+  }
+  .gallery-arrow:hover { background: var(--pale); border-color: var(--navy); }
+  .gallery-arrow svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .publication-list {
+    display: grid;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    max-height: 655px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted) var(--soft);
+  }
+  .publication-list::-webkit-scrollbar { width: 10px; }
+  .publication-list::-webkit-scrollbar-track { background: var(--soft); }
+  .publication-list::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 8px; border: 2px solid var(--soft); }
+  .publication {
+    background: var(--white);
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 54px 1fr auto;
+    gap: 20px;
+    align-items: start;
+  }
+  .publication:nth-child(even) { background: var(--soft); }
+  .publication-number { color: var(--burgundy); font-weight: 800; }
+  .publication h3 { font-size: 18px; margin-bottom: 5px; }
+  .publication a { color: var(--burgundy); font-weight: 800; overflow-wrap: anywhere; }
+  .contact {
+    background: var(--navy);
+    color: var(--white);
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 70px;
+    align-items: center;
+  }
+  .contact h2 { color: var(--white); }
+  .contact p { color: rgba(255,255,255,0.78); font-size: 17px; }
+  .contact-panel {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 8px;
+    padding: 32px;
+  }
+  .contact-row {
+    display: block;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.14);
+  }
+  .contact-row:last-child { border-bottom: 0; }
+  .contact-row span {
+    display: block;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .contact-row strong { color: var(--white); font-size: 17px; overflow-wrap: anywhere; }
+  .social-value { display: inline-flex; align-items: center; gap: 10px; }
+  .social-icon { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.74);
+    border-top: 1px solid rgba(255,255,255,0.14);
+    padding: 30px 20px;
+  }
+  .footer-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer .mark { background: var(--white); color: var(--navy); }
+  footer .brand-title { color: var(--white); }
+  footer .brand-subtitle { color: rgba(255,255,255,0.72); }
+  @media (max-width: 1040px) {
+    .nav { padding: 0 20px; }
+    .nav-links, .nav > a.button { display: none; }
+    .menu-button { display: inline-flex; }
+    .mobile-menu {
+      position: fixed;
+      top: 76px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 45;
+      background: var(--white);
+      padding: 10px 20px 28px;
+      overflow-y: auto;
+      border-top: 1px solid var(--border);
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a {
+      display: block;
+      padding: 17px 0;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--navy);
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .mobile-menu .button { margin-top: 24px; display: flex; color: var(--white); }
+    .hero { padding: 138px 32px 92px; }
+    .hero-grid, .two-col, .contact-grid { grid-template-columns: 1fr; gap: 44px; }
+    .section { padding: 84px 32px; }
+    .section-head { flex-direction: column; }
+    .service-grid, .track-grid { grid-template-columns: 1fr; }
+    .team-card { position: static; }
+    .gallery-track img { flex-basis: calc((100% - 36px) / 4); height: 110px; }
+  }
+  @media (max-width: 760px) {
+    .brand-subtitle { display: none; }
+    .hero { padding: 122px 20px 74px; }
+    .section { padding: 68px 20px; }
+    .hero-copy { font-size: 17px; }
+    .stats-card, .card, .team-card, .project, .highlight, .contact-panel { padding: 24px; }
+    .stat { grid-template-columns: 94px 1fr; }
+    .stat-value { font-size: 31px; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .gallery-track img { flex-basis: calc((100% - 12px) / 2); height: 120px; }
+    .publication { grid-template-columns: 1fr; gap: 10px; padding: 20px; }
+    .footer-inner { align-items: flex-start; flex-direction: column; }
+  }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "ENAULD Technology Health Research and Services",
+  "description": "Consultancy providing research, monitoring, evaluation and learning services to the health sector, with technology and information management services.",
+  "foundingDate": "2010-11",
+  "email": "info@enauld.nl"
+}
+</script>
+</head>
+<body>
+<nav class="nav" aria-label="Main navigation">
+  <a class="brand" href="#home" aria-label="ENAULD home">
+    <div class="mark">E</div>
+    <div>
+      <div class="brand-title">ENAULD</div>
+      <div class="brand-subtitle">Technology Health Research and Services</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#health">Health</a>
+    <a href="#imt">IMT</a>
+    <a href="#team">Team</a>
+    <a href="#track-record">Track Record</a>
+    <a href="#publications">Publications</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a class="button" href="#contact">Contact us</a>
+  <button class="button secondary menu-button" type="button" aria-label="Open menu" aria-expanded="false">
+    <svg class="menu-icon icon-open" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    <svg class="menu-icon icon-close" viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#about">About</a>
+  <a href="#services">Services</a>
+  <a href="#health">Health</a>
+  <a href="#imt">IMT</a>
+  <a href="#team">Team</a>
+  <a href="#track-record">Track Record</a>
+  <a href="#publications">Publications</a>
+  <a href="#contact">Contact</a>
+  <a class="button" href="#contact">Contact us</a>
+</div>
+
+<main>
+  <section class="hero" id="home">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-dot"></span>Established in the Netherlands in 2010</div>
+        <h1>ENAULD Technology Health Research and Services</h1>
+        <p class="hero-copy">ENAULD provides research, monitoring, evaluation and learning services to the health sector, working with knowledge institutes, governments, UN agencies and international organizations.</p>
+        <div class="hero-actions">
+          <a class="button" href="#services">Explore services</a>
+          <a class="button secondary" href="#track-record">View track record</a>
+        </div>
+      </div>
+      <aside class="stats-card" aria-label="ENAULD highlights">
+        <div class="stat"><div class="stat-value">28+</div><div class="stat-label">years of global health and evaluation experience</div></div>
+        <div class="stat"><div class="stat-value">30+</div><div class="stat-label">countries across Africa, Europe, Asia and beyond</div></div>
+        <div class="stat"><div class="stat-value">2021</div><div class="stat-label">technology component integrated into ENAULD</div></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="container">
+      <div class="two-col">
+        <div>
+          <div class="label">About ENAULD</div>
+          <h2>A consultancy built around evidence, learning and decision-making.</h2>
+          <img class="about-image" src="public/enuald_1.jpg" alt="ENAULD" loading="lazy">
+        </div>
+        <div>
+          <p class="lead">ENAULD Technology Health Research and Services was established in November 2010 as ENAULD Health Research and Services. In October 2021 the company restructured to integrate a technology component, reflecting the growing role of data and information systems in evaluation work.</p>
+          <p class="lead">ENAULD's evaluations are designed and delivered by a multidisciplinary team with experience across health systems strengthening, primary health care, immunization, maternal and child health, WASH, education, health financing and governance.</p>
+          <p class="lead">Work is grounded in mixed methods, combining quantitative data with qualitative inquiry to capture the perspectives of policy makers, implementers and the people programmes are meant to serve.</p>
+        </div>
+      </div>
+      <div class="feature-grid">
+        <article class="feature"><h3>Approach</h3><p>Knowledge translation is built into evaluations so findings move from report into decision-making.</p></article>
+        <article class="feature"><h3>Clients</h3><p>Experience includes the World Bank, UNICEF, WFP, WHO, Gavi, 3ie, BMGF, Shell and national governments.</p></article>
+        <article class="feature"><h3>Methods</h3><p>Evaluations combine impact evaluation, theory-based inquiry, evidence synthesis and primary data collection.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section soft" id="services">
+    <div class="container">
+      <div class="label">Services</div>
+      <div class="section-head">
+        <h2>Two service areas supporting evidence, systems and implementation.</h2>
+        <p>ENAULD works across health research and services, alongside information management and technology strategy.</p>
+      </div>
+      <div class="service-grid">
+        <article class="card" id="health">
+          <div class="icon-box">H</div>
+          <h3>Health, Research and Services</h3>
+          <p>Evaluation, monitoring, learning and capacity-building services for the health sector.</p>
+          <ul class="check-list">
+            <li>Impact evaluation and theory-based, mixed-methods evaluation</li>
+            <li>MEL system design and implementation</li>
+            <li>Evidence synthesis and evidence-based decision-making training</li>
+            <li>Knowledge translation structures</li>
+            <li>Primary data collection combining quantitative and qualitative methods</li>
+          </ul>
+        </article>
+        <article class="card" id="imt">
+          <div class="icon-box">IMT</div>
+          <h3>Information, Management and Technology</h3>
+          <p>Information systems and management strategy for organizations operating in fast-changing environments.</p>
+          <ul class="check-list">
+            <li>Information systems design to support monitoring and evaluation</li>
+            <li>Data management strategy for evaluation and research programmes</li>
+            <li>Technology integration into existing MEL frameworks</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="team">
+    <div class="container two-col">
+      <aside class="team-card">
+        <img class="team-photo" src="public/ngozi.jpg" alt="Dr. Ngozi Akwataghibe" loading="lazy">
+        <div class="label">Team</div>
+        <h2>Dr. Ngozi Akwataghibe, MD, MPH, PhD</h2>
+        <p>Principal Consultant, ENAULD Technology Health Research and Services. Senior Associate, Oversee Advising Group.</p>
+        <ul class="mini-list">
+          <li>Senior Evaluation Specialist</li>
+          <li>Public Health Physician</li>
+          <li>Transdisciplinary Global Health expert</li>
+          <li>28 years of professional experience</li>
+        </ul>
+      </aside>
+      <div>
+        <p class="lead">Dr. Akwataghibe leads and advises on complex evaluations, policy-relevant research and learning initiatives for multilateral organizations, governments and global partnerships.</p>
+        <p class="lead">Her work covers evaluation design, implementation and quality assurance, including impact evaluations, theory-based and mixed-methods evaluations, MEL systems and adaptive learning frameworks.</p>
+        <p class="lead">She has led evaluations commissioned by the World Bank, UNICEF, WFP, WHO, Gavi, 3ie, the Bill & Melinda Gates Foundation, Shell and other global partners.</p>
+        <div class="info-block">
+          <h3>Education</h3>
+          <ul>
+            <li>PhD, Transdisciplinary Global Health - Vrije Universiteit Amsterdam, 2024</li>
+            <li>Master of Public Health (MPH) - Vrije Universiteit Amsterdam, 2010</li>
+            <li>MBBS, Bachelor in Medicine, Bachelor in Surgery - College of Medicine, University of Nigeria, 1989</li>
+          </ul>
+        </div>
+        <div class="info-block">
+          <h3>Areas of expertise</h3>
+          <ul>
+            <li>Medicine and surgery; public health; global health</li>
+            <li>Impact evaluation, implementation research, policy analysis and MEL</li>
+            <li>Health systems strengthening, WASH, health financing, gender and equity analysis</li>
+          </ul>
+        </div>
+        <div class="info-block">
+          <h3>Geographical experience</h3>
+          <ul>
+            <li>Nigeria, Liberia, Ghana, Tanzania, Mozambique, South Sudan, Somalia, Oman, the Netherlands, the UK, China, Vietnam, South Africa, Mexico, Cote d'Ivoire and other countries across Africa, Europe, North America and Asia.</li>
+          </ul>
+        </div>
+        <div class="info-block">
+          <h3>Awards</h3>
+          <ul>
+            <li>Distinction Award, MPH, Vrije Universiteit Amsterdam, 2010</li>
+            <li>Graduated on the Merit List, College of Medicine, University of Nigeria, class of 1989</li>
+            <li>Federal Government of Nigeria Scholarship for Academic Excellence, 1979-1983</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section soft" id="track-record">
+    <div class="container">
+      <div class="label">Track record</div>
+      <h2 style="max-width: 760px; margin-bottom: 42px;">Evaluations and reviews led by Dr. Ngozi Akwataghibe.</h2>
+      <div class="track-grid" id="track-grid"></div>
+    </div>
+  </section>
+
+  <section class="section gallery-section" id="gallery" aria-label="Photo gallery">
+    <div class="container">
+      <div class="label">Gallery</div>
+      <div class="gallery-carousel">
+        <button class="gallery-arrow prev" type="button" aria-label="Previous images">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 6 9 12 15 18"/></svg>
+        </button>
+        <div class="gallery-viewport" id="gallery-viewport">
+          <div class="gallery-track" id="gallery-track"></div>
+        </div>
+        <button class="gallery-arrow next" type="button" aria-label="Next images">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="publications">
+    <div class="container">
+      <div class="label">Publications</div>
+      <h2 style="max-width: 700px; margin-bottom: 38px;">Peer-reviewed and research output.</h2>
+      <div class="publication-list">
+        <article class="publication"><div class="publication-number">01</div><div><h3>Improving Immunization Utilization Using Participatory Action Research in Nigeria.</h3><p>PhD thesis, 2024. ISBN 9789464734355.</p></div><a target="_blank" rel="noopener noreferrer" href="http://doi.org/10.5463/thesis.601">Open</a></article>
+        <article class="publication"><div class="publication-number">02</div><div><h3>Inclusion strategies in multi-stakeholder dialogues: the case of a community-based participatory research on immunization in Nigeria.</h3><p>PLoS One, 2022.</p></div><a target="_blank" rel="noopener noreferrer" href="https://pubmed.ncbi.nlm.nih.gov/35316275/">Open</a></article>
+        <article class="publication"><div class="publication-number">03</div><div><h3>Using participatory action research to improve immunization utilization in areas with pockets of unimmunized children in Nigeria.</h3><p>Health Research Policy and Systems, 2021.</p></div><a target="_blank" rel="noopener noreferrer" href="https://doi.org/10.1186/s12961-021-00719-9">Open</a></article>
+        <article class="publication"><div class="publication-number">04</div><div><h3>Exploring factors influencing immunization utilization in Nigeria - a mixed methods study.</h3><p>Frontiers in Public Health, 2019.</p></div><a target="_blank" rel="noopener noreferrer" href="https://doi.org/10.3389/fpubh.2019.00392">Open</a></article>
+        <article class="publication"><div class="publication-number">05</div><div><h3>Increasing immunisation in Ogun State, Nigeria: a formative evaluation of a participatory action research intervention.</h3><p>3ie Formative Evaluation Report, 2019.</p></div><a target="_blank" rel="noopener noreferrer" href="https://doi.org/10.23846/TW10FE04">Open</a></article>
+        <article class="publication"><div class="publication-number">06</div><div><h3>Exploring equity focus of the SHAWN WASH programme in Nigeria.</h3><p>Journal of Water, Sanitation and Hygiene for Development, 2018.</p></div><a target="_blank" rel="noopener noreferrer" href="https://doi.org/10.2166/washdev.2018.020">Open</a></article>
+        <article class="publication"><div class="publication-number">07</div><div><h3>Multi-country Formative Evaluation of the Key Result for Children #7 (Birth Registration), 2018-2021 - Liberia Final Report.</h3><p>UNICEF, 2021.</p></div><a target="_blank" rel="noopener noreferrer" href="https://www.unicef.org/evaluation/reports#/detail/17829/multi-country-formative-evaluation-of-the-key-result-for-children-krc-7-birth-registration-for-the-period-2018-2021-including-during-the-covid-19-pandemic">Open</a></article>
+        <article class="publication"><div class="publication-number">08</div><div><h3>Performance-Based Financing, Basic Packages of Health Services and User-Fee Exemption Mechanisms: an analysis of health-financing policy integration in three fragile and conflict-affected settings.</h3><p>Applied Health Economics and Health Policy, 2020.</p></div><a target="_blank" rel="noopener noreferrer" href="https://link.springer.com/article/10.1007%2Fs40258-020-00567-8">Open</a></article>
+        <article class="publication"><div class="publication-number">09</div><div><h3>Performance-based financing in three humanitarian settings: principles and pragmatism.</h3><p>Conflict and Health, 2018.</p></div><a target="_blank" rel="noopener noreferrer" href="https://conflictandhealth.biomedcentral.com/track/pdf/10.1186/s13031-018-0166-9">Open</a></article>
+        <article class="publication"><div class="publication-number">10</div><div><h3>Who benefits from the Obio Community Health Insurance Scheme in Rivers State, Nigeria? A benefit incidence analysis.</h3><p>International Health, 2016.</p></div><a target="_blank" rel="noopener noreferrer" href="http://inthealth.oxfordjournals.org/cgi/content/full/ihw040?ijkey=zkrxZ0zhpSER9Is&keytype=ref">Open</a></article>
+        <article class="publication"><div class="publication-number">11</div><div><h3>Impact Evaluation of Water, Sanitation, and Hygiene (WASH) within the UNICEF Country Programme of Cooperation, 2009-2013.</h3><p>Government of Nigeria and UNICEF, 2014.</p></div><a target="_blank" rel="noopener noreferrer" href="http://www2.unicef.org:60090/evaldatabase/files/Nigeria_Impact_Evaluation_of_WASH_within_the_UNICEF_Country_Programme_of_Cooperation_Report.pdf">Open</a></article>
+        <article class="publication"><div class="publication-number">12</div><div><h3>Assessing health workers' revenues and coping strategies in Nigeria - a mixed methods study.</h3><p>BMC Health Services Research, 2013.</p></div><a target="_blank" rel="noopener noreferrer" href="http://www.biomedcentral.com/1472-6963/13/387">Open</a></article>
+        <article class="publication"><div class="publication-number">13</div><div><h3>A systematic review of outcome and impact of Master's in health and health care.</h3><p>BMC Medical Education, 2013.</p></div><a target="_blank" rel="noopener noreferrer" href="http://www.biomedcentral.com/1472-6920/13/18">Open</a></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact" id="contact">
+    <div class="container contact-grid">
+      <div>
+        <div class="label" style="color: rgba(255,255,255,0.76);">Contact us</div>
+        <h2>Discuss how ENAULD can support your organization.</h2>
+        <p>Get in touch to discuss research, evaluation, MEL, evidence synthesis, knowledge translation or information management technology needs.</p>
+      </div>
+      <aside class="contact-panel">
+        <a class="contact-row" href="mailto:info@enauld.nl"><span>Email</span><strong>info@enauld.nl</strong></a>
+        <a class="contact-row" target="_blank" rel="noopener noreferrer" href="https://twitter.com/NgoziAkwataghib"><span>X (Twitter)</span><strong class="social-value"><svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>X (Twitter)</strong></a>
+        <a class="contact-row" target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/ngoziakwataghibe/"><span>LinkedIn</span><strong class="social-value"><svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.852 3.37-1.852 3.601 0 4.267 2.37 4.267 5.455v6.288zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>LinkedIn</strong></a>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<div class="gallery-modal" id="gallery-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Gallery image">
+  <button class="gallery-modal-close" type="button" aria-label="Close">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+  </button>
+  <figure class="gallery-modal-figure">
+    <img id="gallery-modal-img" src="" alt="">
+    <figcaption id="gallery-modal-caption"></figcaption>
+  </figure>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a class="brand" href="#home" aria-label="ENAULD home">
+      <div class="mark">E</div>
+      <div>
+        <div class="brand-title">ENAULD</div>
+        <div class="brand-subtitle">Technology Health Research and Services</div>
+      </div>
+    </a>
+    <div>&copy;2026 ENAULD Technology Health Research and Services</div>
+  </div>
+</footer>
+
+<script src="projects-data.js"></script>
+<script>
+  // Render Track Record cards from the shared project data.
+  (function renderTrackRecord() {
+    const grid = document.getElementById('track-grid');
+    const projects = window.ENAULD_PROJECTS;
+    if (!grid || !Array.isArray(projects)) return;
+    const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]
+    ));
+    grid.innerHTML = projects.map((p) => `
+      <a class="project" href="project.html#${encodeURIComponent(p.slug)}" target="_blank" rel="noopener noreferrer">
+        <div class="project-meta">${esc(p.agency)} — ${esc(p.period)}</div>
+        <h3>${esc(p.title)}</h3>
+        <p>${esc(p.summary)}</p>
+        <span class="project-link">View details →</span>
+      </a>`).join('');
+  })();
+
+  // Gallery carousel: 6 visible, arrows for manual control, auto-scroll one at a time.
+  (function galleryCarousel() {
+    const track = document.getElementById('gallery-track');
+    const viewport = document.getElementById('gallery-viewport');
+    if (!track || !viewport) return;
+
+    const GAP = 12;
+    const TRANSITION = 'transform 0.55s ease';
+    const total = 10; // gal_1.jpg … gal_10.jpg
+    const CLONES = 6; // = max images visible at once
+
+    const sources = [];
+    for (let i = 1; i <= total; i++) sources.push(`image/gallery/gal_${i}.jpg`);
+    // originals + clones of the first CLONES (for a seamless forward loop)
+    const order = sources.concat(sources.slice(0, CLONES));
+    track.innerHTML = order.map((src, i) =>
+      `<img src="${src}" alt="ENAULD gallery image ${((i % total) + 1)}" loading="lazy" draggable="false">`).join('');
+
+    let index = 0;
+    let step = 0;
+
+    function measure() {
+      const first = track.querySelector('img');
+      step = first ? first.getBoundingClientRect().width + GAP : 0;
+    }
+    function place(animate) {
+      track.style.transition = animate ? TRANSITION : 'none';
+      track.style.transform = `translateX(${-index * step}px)`;
+    }
+
+    function next() {
+      if (index >= total) { index -= total; place(false); void track.offsetWidth; }
+      index += 1;
+      place(true);
+    }
+    function prev() {
+      if (index <= 0) {
+        index = total;            // jump to the visually identical clone region
+        place(false);
+        void track.offsetWidth;   // force reflow so the next move animates
+        index = total - 1;
+        place(true);
+      } else {
+        index -= 1;
+        place(true);
+      }
+    }
+
+    track.addEventListener('transitionend', () => {
+      if (index >= total) { index -= total; place(false); }
+    });
+
+    measure();
+    place(false);
+
+    let timer = null;
+    const DELAY = 2800;
+    function start() { stop(); timer = setInterval(next, DELAY); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+    const carousel = track.closest('.gallery-carousel');
+    document.querySelector('.gallery-arrow.next').addEventListener('click', () => { next(); start(); });
+    document.querySelector('.gallery-arrow.prev').addEventListener('click', () => { prev(); start(); });
+    carousel.addEventListener('mouseenter', stop);
+    carousel.addEventListener('mouseleave', start);
+
+    let rt = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(rt);
+      rt = setTimeout(() => {
+        if (index >= total) index -= total;
+        measure();
+        place(false);
+      }, 150);
+    });
+
+    // ---- Click-to-zoom modal with caption (descriptions from descriptions.json) ----
+    let descriptions = {};
+    fetch('image/gallery/descriptions.json')
+      .then((r) => (r.ok ? r.json() : {}))
+      .then((data) => { descriptions = data || {}; })
+      .catch(() => {});
+
+    const modal = document.getElementById('gallery-modal');
+    const modalImg = document.getElementById('gallery-modal-img');
+    const modalCaption = document.getElementById('gallery-modal-caption');
+    const fileOf = (src) => src.split('/').pop().split('?')[0];
+
+    function openModal(src) {
+      const file = fileOf(src);
+      modalImg.src = src;
+      modalImg.alt = (descriptions[file] || '').trim() || 'ENAULD gallery image';
+      modalCaption.textContent = (descriptions[file] || '').trim();
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('menu-open');
+      stop();
+    }
+    function closeModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('menu-open');
+      start();
+    }
+
+    track.addEventListener('click', (e) => {
+      const img = e.target.closest('img');
+      if (img) openModal(img.getAttribute('src'));
+    });
+    modal.querySelector('.gallery-modal-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+    });
+
+    start();
+  })();
+
+  const menuButton = document.querySelector('.menu-button');
+  const mobileMenu = document.querySelector('#mobile-menu');
+  menuButton.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    document.body.classList.toggle('menu-open', open);
+    menuButton.setAttribute('aria-expanded', String(open));
+    menuButton.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  mobileMenu.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      document.body.classList.remove('menu-open');
+      menuButton.setAttribute('aria-expanded', 'false');
+      menuButton.setAttribute('aria-label', 'Open menu');
+    });
+  });
+</script>
+</body>
+</html>
