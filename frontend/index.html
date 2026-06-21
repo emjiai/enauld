@@ -7,7 +7,7 @@
 <link rel="icon" type="image/x-icon" href="public/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap&subset=latin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
 <meta name="description" content="ENAULD Technology Health Research and Services provides monitoring, evaluation, learning, health research, evidence synthesis, and information management technology services.">
 <meta name="keywords" content="ENAULD, health research, monitoring evaluation learning, MEL, impact evaluation, evidence synthesis, knowledge translation, information management technology">
 <meta name="author" content="ENAULD Technology Health Research and Services">
@@ -633,7 +633,7 @@
         <div>
           <div class="label">About ENAULD</div>
           <h2>A consultancy built around evidence, learning and decision-making.</h2>
-          <img class="about-image" src="public/enuald_1.jpg" alt="ENAULD" width="1936" height="1936" loading="lazy" decoding="async" fetchpriority="low">
+          <img class="about-image" src="public/enuald_1.webp" alt="ENAULD" width="736" height="736" loading="lazy" decoding="async" fetchpriority="low">
         </div>
         <div>
           <p class="lead">ENAULD Technology Health Research and Services was established in November 2010 as ENAULD Health Research and Services. In October 2021 the company restructured to integrate a technology component, reflecting the growing role of data and information systems in evaluation work.</p>
@@ -686,7 +686,7 @@
   <section class="section" id="team">
     <div class="container two-col">
       <aside class="team-card">
-        <img class="team-photo" src="public/ngozi.jpg" alt="Dr. Ngozi Akwataghibe" width="1600" height="1280" loading="lazy" decoding="async" fetchpriority="low">
+        <img class="team-photo" src="public/ngozi.webp" alt="Dr. Ngozi Akwataghibe" width="700" height="560" loading="lazy" decoding="async" fetchpriority="low">
         <div class="label">Team</div>
         <h2>Dr. Ngozi Akwataghibe, MD, MPH, PhD</h2>
         <p>Principal Consultant, ENAULD Technology Health Research and Services. Senior Associate, Oversee Advising Group.</p>
@@ -855,11 +855,11 @@
 
       const GAP = 12;
       const TRANSITION = 'transform 0.55s ease';
-      const total = 10; // gal_1.jpg … gal_10.jpg
+      const total = 10; // gal_1.webp … gal_10.webp
       const CLONES = 6; // = max images visible at once
 
       const sources = [];
-      for (let i = 1; i <= total; i++) sources.push(`image/gallery/gal_${i}.jpg`);
+      for (let i = 1; i <= total; i++) sources.push(`image/gallery/gal_${i}.webp`);
       // originals + clones of the first CLONES (for a seamless forward loop)
       const order = sources.concat(sources.slice(0, CLONES));
       track.innerHTML = order.map((src, i) =>
