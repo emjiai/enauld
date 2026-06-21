@@ -72,7 +72,7 @@ Because `.env` is gitignored, you must add your secrets manually in the Vercel d
 
 4. Click **Save** after each entry
 
-> **Note:** For this static HTML site, these Vercel env vars are stored securely in Vercel's system and are for your reference. The EmailJS keys are already embedded in `Contact.html` and `BookConsultation.html` and work directly in the browser — no server-side injection needed. If you later add a serverless function (e.g. `/api/send-email`), Vercel will inject these vars into it automatically.
+> **Note:** For this static HTML site, these Vercel env vars are stored securely in Vercel's system and are for your reference. The EmailJS keys are already embedded in `Contact.html` and work directly in the browser — no server-side injection needed. If you later add a serverless function (e.g. `/api/send-email`), Vercel will inject these vars into it automatically.
 
 ---
 
@@ -107,9 +107,9 @@ Add these records at your domain registrar's DNS settings:
 | Check | Expected |
 |---|---|
 | `https://yourdomain.com` | Homepage loads (index.html) |
-| `https://yourdomain.com/Projects.html` | Projects page loads |
 | `https://yourdomain.com/Contact.html` | Contact form loads and sends email |
-| `https://yourdomain.com/BookConsultation.html` | Booking form loads and sends email |
+| Clicking a Track Record card | Opens `project.html#<slug>` with full details |
+| Clicking a gallery image | Opens the modal with its caption |
 | Favicon in browser tab | ✓ |
 | Logo visible in nav | ✓ |
 | `https://yourdomain.com/llm.txt` | LLM context file accessible |

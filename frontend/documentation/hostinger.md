@@ -63,7 +63,7 @@ Because `.env` is gitignored it won't be deployed automatically. You must upload
 4. Paste the contents of your local `.env` file into the editor
 5. Click **Save**
 
-> For a **static HTML site**, the `.env` file on the server is for your reference only — the HTML files cannot read it at runtime. The EmailJS keys (public key, service ID, template IDs) are already embedded in `Contact.html` and `BookConsultation.html` and will work as-is. The Gmail App Password in `.env` would only be used if you later add a server-side script (PHP/Node.js).
+> For a **static HTML site**, the `.env` file on the server is for your reference only — the HTML files cannot read it at runtime. The EmailJS keys (public key, service ID, template IDs) are already embedded in `Contact.html` and will work as-is. The Gmail App Password in `.env` would only be used if you later add a server-side script (PHP/Node.js).
 
 ---
 
@@ -91,8 +91,8 @@ Because `.env` is gitignored it won't be deployed automatically. You must upload
 | Check | Expected |
 |---|---|
 | `https://yourdomain.com` | Homepage loads (index.html) |
-| `https://yourdomain.com/Projects.html` | Projects page loads |
 | `https://yourdomain.com/Contact.html` | Contact form loads |
+| Clicking a Track Record card | Opens `project.html#<slug>` with full details |
 | Favicon in browser tab | ✓ |
 | Submit contact form | Email arrives at info@workerbull.com |
 | Logo visible in nav | ✓ |
