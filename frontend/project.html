@@ -7,7 +7,7 @@
 <link rel="icon" type="image/x-icon" href="public/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap&subset=latin" rel="stylesheet">
 <meta name="robots" content="noindex">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -183,10 +183,9 @@
         const next = () => {
           if (i >= exts.length) return resolve(null);
           const src = `image/${base}.${exts[i++]}`;
-          const im = new Image();
-          im.onload = () => resolve(src);
-          im.onerror = next;
-          im.src = src;
+          fetch(src, { method: 'HEAD' })
+            .then((r) => (r.ok ? resolve(src) : next()))
+            .catch(next);
         };
         next();
       });
@@ -204,7 +203,7 @@
       }
       if (!found.length) return;
       gallery.innerHTML = found.map((src) =>
-        `<img src="${src}" alt="${esc(project.title)}" loading="lazy">`).join('');
+        `<img src="${src}" alt="${esc(project.title)}" loading="lazy" decoding="async" fetchpriority="low">`).join('');
       imageCard.classList.remove('hidden');
     })();
 
@@ -219,7 +218,7 @@
 
     if (project.videoUrl && youTubeId(project.videoUrl)) {
       videoHolder.innerHTML =
-        `<iframe src="https://www.youtube.com/embed/${youTubeId(project.videoUrl)}" title="${esc(project.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        `<iframe src="https://www.youtube.com/embed/${youTubeId(project.videoUrl)}" title="${esc(project.title)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
       videoCard.classList.remove('hidden');
     } else {
       const vsrc = `video/${project.slug}.mp4`;
