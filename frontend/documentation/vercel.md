@@ -28,7 +28,7 @@ git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
 git push -u origin main
 ```
 
-> `.env` will NOT be pushed — it is covered by `.gitignore`. ✓
+> The site has no secrets to deploy; `.env` files stay gitignored by default. ✓
 
 ---
 
@@ -50,29 +50,14 @@ Vercel will deploy in about 30 seconds and give you a live URL like:
 
 ---
 
-## Step 3 — Add Environment Variables in Vercel
+## Step 3 — Environment Variables (none required)
 
-Because `.env` is gitignored, you must add your secrets manually in the Vercel dashboard.
+This site is fully static and needs **no environment variables**. There is no contact form,
+no EmailJS integration, and no API keys — the Contact page uses a plain `mailto:` link, and the
+only runtime requests are to local static files in the deploy. You can skip this step entirely.
 
-1. Go to your project in the Vercel dashboard
-2. Click **Settings** → **Environment Variables**
-3. Add each variable one at a time:
-
-| Name | Value | Environment |
-|---|---|---|
-| `EMAIL_HOST` | `smtp.gmail.com` | Production, Preview, Development |
-| `EMAIL_PORT` | `587` | Production, Preview, Development |
-| `EMAIL_HOST_USER` | `info@workerbull.com` | Production, Preview, Development |
-| `EMAIL_HOST_PASSWORD` | *(your Gmail App Password)* | Production, Preview, Development |
-| `EMAIL_USE_TLS` | `True` | Production, Preview, Development |
-| `EMAILJS_PUBLIC_KEY` | `DhBapWbS8FZDIVHeP` | Production, Preview, Development |
-| `EMAILJS_SERVICE_ID` | `service_workerbull` | Production, Preview, Development |
-| `EMAILJS_TEMPLATE_CONTACT` | `template_contact` | Production, Preview, Development |
-| `EMAILJS_TEMPLATE_BOOKING` | `template_booking` | Production, Preview, Development |
-
-4. Click **Save** after each entry
-
-> **Note:** For this static HTML site, these Vercel env vars are stored securely in Vercel's system and are for your reference. The EmailJS keys are already embedded in `Contact.html` and work directly in the browser — no server-side injection needed. If you later add a serverless function (e.g. `/api/send-email`), Vercel will inject these vars into it automatically.
+> If you later add a serverless function (e.g. `/api/send-email`), add its secrets under
+> **Settings → Environment Variables** at that point.
 
 ---
 
@@ -138,6 +123,6 @@ Pull request branches also get a unique **preview URL** automatically, so you ca
 |---|---|---|
 | 1 | Terminal | Push code to GitHub |
 | 2 | vercel.com/new | Import repo, no build config needed |
-| 3 | Vercel → Settings → Env Vars | Add all keys from .env manually |
+| 3 | — | No environment variables required |
 | 4 | Vercel → Settings → Domains | Add domain + DNS records |
-| 5 | Browser | Verify live site and forms |
+| 5 | Browser | Verify live site |

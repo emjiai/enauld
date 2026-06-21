@@ -15,7 +15,7 @@ git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
 git push -u origin main
 ```
 
-> `.env` will NOT be pushed — it is covered by `.gitignore`. ✓
+> The site has no secrets to deploy; `.env` files stay gitignored by default. ✓
 
 ---
 
@@ -53,17 +53,11 @@ From now on, every `git push` to `main` will automatically update the live site 
 
 ---
 
-## Step 4 — Add Your .env to Hostinger (Manual Upload)
+## Step 4 — Environment Variables (none required)
 
-Because `.env` is gitignored it won't be deployed automatically. You must upload it manually once.
-
-1. In hPanel → **Files** → **File Manager**
-2. Navigate to `public_html/`
-3. Click **New File** → name it `.env`
-4. Paste the contents of your local `.env` file into the editor
-5. Click **Save**
-
-> For a **static HTML site**, the `.env` file on the server is for your reference only — the HTML files cannot read it at runtime. The EmailJS keys (public key, service ID, template IDs) are already embedded in `Contact.html` and will work as-is. The Gmail App Password in `.env` would only be used if you later add a server-side script (PHP/Node.js).
+This site is fully static and needs **no environment variables** and no `.env` file on the
+server. There is no contact form or EmailJS integration — the Contact page uses a plain
+`mailto:` link. You can skip this step entirely.
 
 ---
 
@@ -91,10 +85,10 @@ Because `.env` is gitignored it won't be deployed automatically. You must upload
 | Check | Expected |
 |---|---|
 | `https://yourdomain.com` | Homepage loads (index.html) |
-| `https://yourdomain.com/Contact.html` | Contact form loads |
+| `https://yourdomain.com/Contact.html` | Contact page loads |
 | Clicking a Track Record card | Opens `project.html#<slug>` with full details |
+| Clicking the email link | Opens mail client to `info@enauld.nl` |
 | Favicon in browser tab | ✓ |
-| Submit contact form | Email arrives at info@workerbull.com |
 | Logo visible in nav | ✓ |
 
 ---
@@ -118,7 +112,7 @@ git push origin main
 | 1 | Terminal | Push code to GitHub |
 | 2 | hPanel → Git | Connect GitHub repo to public_html |
 | 3 | GitHub + hPanel | Set up auto-deploy webhook |
-| 4 | hPanel → File Manager | Manually upload .env |
+| 4 | — | No environment variables required |
 | 5 | hPanel → Domains | Point domain to hosting |
 | 6 | hPanel → SSL | Install free HTTPS certificate |
 | 7 | Browser | Verify live site |
