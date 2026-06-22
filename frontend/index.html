@@ -79,28 +79,11 @@
     backdrop-filter: blur(16px);
   }
   .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
-  .mark {
-    width: 38px;
-    height: 38px;
-    border-radius: 6px;
-    background: var(--navy);
-    color: var(--white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--serif);
-    font-size: 21px;
-    font-weight: 600;
+  .brand-logo {
+    display: block;
+    width: 146px;
+    height: auto;
     flex-shrink: 0;
-  }
-  .brand-title { color: var(--navy); font-size: 16px; font-weight: 800; letter-spacing: 0.08em; line-height: 1.05; }
-  .brand-subtitle {
-    color: var(--muted);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    line-height: 1.25;
-    max-width: 220px;
   }
   .nav-links { display: flex; align-items: center; gap: 22px; }
   .nav-links a { color: var(--muted); font-size: 14px; font-weight: 700; }
@@ -159,7 +142,7 @@
   }
   .hero-grid {
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-columns: 1.25fr 0.75fr;
     gap: 72px;
     align-items: center;
   }
@@ -190,14 +173,15 @@
   }
   .stat {
     display: grid;
-    grid-template-columns: 112px 1fr;
-    gap: 18px;
+    grid-template-columns: 92px 1fr;
+    gap: 14px;
     align-items: center;
     padding: 18px 0;
     border-bottom: 1px solid rgba(255,255,255,0.14);
   }
   .stat:last-child { border-bottom: 0; }
-  .stat-value { color: var(--white); font-family: var(--serif); font-size: 38px; line-height: 1; }
+  .stat-value { color: var(--white); font-family: var(--serif); font-size: 34px; line-height: 1; }
+  .stat.registration .stat-value { font-size: 20px; font-weight: 700; }
   .stat-label { color: rgba(255,255,255,0.78); font-size: 14px; }
   .about-image {
     display: block;
@@ -521,9 +505,7 @@
     justify-content: space-between;
     align-items: center;
   }
-  footer .mark { background: var(--white); color: var(--navy); }
-  footer .brand-title { color: var(--white); }
-  footer .brand-subtitle { color: rgba(255,255,255,0.72); }
+  footer .brand-logo { width: 132px; }
   @media (max-width: 1040px) {
     .nav { padding: 0 20px; }
     .nav-links, .nav > a.button { display: none; }
@@ -559,13 +541,14 @@
     .gallery-track img { flex-basis: calc((100% - 36px) / 4); height: 110px; }
   }
   @media (max-width: 760px) {
-    .brand-subtitle { display: none; }
+    .brand-logo { width: 122px; }
     .hero { padding: 122px 20px 74px; }
     .section { padding: 68px 20px; }
     .hero-copy { font-size: 17px; }
     .stats-card, .card, .team-card, .project, .highlight, .contact-panel { padding: 24px; }
-    .stat { grid-template-columns: 94px 1fr; }
-    .stat-value { font-size: 31px; }
+    .stat { grid-template-columns: 82px 1fr; gap: 12px; }
+    .stat-value { font-size: 29px; }
+    .stat.registration .stat-value { font-size: 18px; }
     .feature-grid { grid-template-columns: 1fr; }
     .gallery-track img { flex-basis: calc((100% - 12px) / 2); height: 120px; }
     .publication { grid-template-columns: 1fr; gap: 10px; padding: 20px; }
@@ -586,11 +569,7 @@
 <body>
 <nav class="nav" aria-label="Main navigation">
   <a class="brand" href="#home" aria-label="ENAULD home">
-    <div class="mark">E</div>
-    <div>
-      <div class="brand-title">ENAULD</div>
-      <div class="brand-subtitle">Technology Health Research and Services</div>
-    </div>
+    <img class="brand-logo" src="public/enauld_logo.png" alt="ENAULD">
   </a>
   <div class="nav-links">
     <a href="#about">About</a>
@@ -636,6 +615,7 @@
         <div class="stat"><div class="stat-value">28+</div><div class="stat-label">years of global health and evaluation experience</div></div>
         <div class="stat"><div class="stat-value">30+</div><div class="stat-label">countries across Africa, Europe, Asia and beyond</div></div>
         <div class="stat"><div class="stat-value">2021</div><div class="stat-label">technology component integrated into ENAULD</div></div>
+        <div class="stat registration"><div class="stat-value">84344806</div><div class="stat-label">Kamer van Koophandel (Chamber of Commerce) Netherlands</div></div>
       </aside>
     </div>
   </section>
@@ -824,11 +804,7 @@
 <footer>
   <div class="footer-inner">
     <a class="brand" href="#home" aria-label="ENAULD home">
-      <div class="mark">E</div>
-      <div>
-        <div class="brand-title">ENAULD</div>
-        <div class="brand-subtitle">Technology Health Research and Services</div>
-      </div>
+      <img class="brand-logo" src="public/enauld_logo_t.png" alt="ENAULD">
     </a>
     <div>&copy;2026 ENAULD Technology Health Research and Services</div>
   </div>
