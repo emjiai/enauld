@@ -30,9 +30,6 @@
   /** Pointer must land this close to a marker centre to select it. */
   var HIT_RADIUS = 14;
 
-  /** Direction to walk the limb when closing a clipped land ring. */
-  var LIMB_CCW = true;
-
   function esc(value) {
     return String(value == null ? '' : value).replace(/[&<>"]/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
@@ -56,19 +53,6 @@
     };
   }
 
-  /** Screen point back to lat/lng. Returns null outside the sphere. */
-  function unproject(x, y, rotation, radius, cx, cy) {
-    var dx = (x - cx) / radius;
-    var dy = (cy - y) / radius;
-    var rho2 = dx * dx + dy * dy;
-    if (rho2 > 1) { return null; }
-
-    var lat = Math.asin(dy) / DEG;
-    var lng = Math.atan2(dx, Math.sqrt(Math.max(0, 1 - rho2))) / DEG + rotation;
-
-    return { lat: lat, lng: ((lng + 180) % 360 + 360) % 360 - 180 };
-  }
-
   /**
    * Pre-compute the trig for a ring of [lng, lat] pairs. Rotation is the only thing that
    * changes between frames and it factors out of the projection, so every frame after
@@ -87,6 +71,24 @@
     }
 
     return a;
+  }
+
+  /**
+   * Does this ring wind a full turn in longitude, i.e. encircle a pole? Only Antarctica
+   * does here. Such a ring wraps the entire limb, so no single arc between two crossings
+   * can bound it and the short-way rule cannot apply; it is stroked but not filled.
+   */
+  function encirclesPole(ring) {
+    var sum = 0;
+
+    for (var i = 1; i < ring.length; i++) {
+      var d = ring[i][0] - ring[i - 1][0];
+      while (d > 180) { d -= 360; }
+      while (d < -180) { d += 360; }
+      sum += d;
+    }
+
+    return Math.abs(sum) > 180;
   }
 
   function drawGraticule(ctx, rotation, radius, cx, cy) {
@@ -149,14 +151,32 @@
 
     var accent = channels(root.getPropertyValue('--burgundy').trim() || '#8B1A1A');
 
-    var points = Object.keys(data.countries).map(function (code) {
-      var c = data.countries[code];
-      return { code: code, name: c.name, lat: c.lat, lng: c.lng, region: c.region };
+    // Which countries actually have engagement records behind them. The rest are part of
+    // the wider footprint: they still get a marker, because the figure is about reach,
+    // but nothing about them is clickable — opening a modal with no rows in it is worse
+    // than not opening one at all.
+    var linked = {};
+    (window.ENAULD_PROJECTS || []).forEach(function (p) {
+      (p.countries || []).forEach(function (code) { linked[code] = true; });
     });
 
-    var landRings = (data.land || []).map(preTrig);
-    var scratchLength = landRings.reduce(function (max, a) {
-      return Math.max(max, a.length / 4);
+    var points = Object.keys(data.countries).map(function (code) {
+      var c = data.countries[code];
+      return {
+        code: code,
+        name: c.name,
+        lat: c.lat,
+        lng: c.lng,
+        region: c.region,
+        linked: !!linked[code],
+      };
+    });
+
+    var landRings = (data.land || []).map(function (ring) {
+      return { pts: preTrig(ring), fillable: !encirclesPole(ring) };
+    });
+    var scratchLength = landRings.reduce(function (max, r) {
+      return Math.max(max, r.pts.length / 4);
     }, 0);
     var sx = new Float64Array(scratchLength);
     var sy = new Float64Array(scratchLength);
@@ -289,17 +309,32 @@
       /** Where edge i->j crosses the horizon, as a screen point plus its canvas angle. */
       function crossing(i, j) {
         var t = sz[i] / (sz[i] - sz[j]);
-        var vx = sx[i] + (sx[j] - sx[i]) * t;
-        var vy = sy[i] + (sy[j] - sy[i]) * t;
+        var dx = sx[j] - sx[i];
+        var dy = sy[j] - sy[i];
+        var vx = sx[i] + dx * t;
+        var vy = sy[i] + dy * t;
         var m = Math.sqrt(vx * vx + vy * vy) || 1;
         vx /= m;
         vy /= m;
+
         // Canvas y grows downward, hence the negated vy in both places.
         return { x: cx + vx * radius, y: cy - vy * radius, ang: Math.atan2(-vy, vx) };
       }
 
+      /**
+       * Walk the limb the short way round from one crossing to the next. Sweeping the
+       * long way encloses the rest of the disc, and the fill then floods the globe with
+       * a translucent sheet of land colour.
+       */
+      function limbTo(from, to) {
+        var d = to - from;
+        while (d > Math.PI) { d -= Math.PI * 2; }
+        while (d < -Math.PI) { d += Math.PI * 2; }
+        ctx.arc(cx, cy, radius, from, to, d < 0);
+      }
+
       for (var r = 0; r < landRings.length; r++) {
-        var a = landRings[r];
+        var a = landRings[r].pts;
         var n = a.length / 4;
         var anyVisible = false;
         var i, o, j;
@@ -331,49 +366,51 @@
          * fill() does to an open path) painted slabs across the globe, and detouring the
          * far-side points outside the sphere floods it whenever a landmass spans more
          * than half the world — Eurasia and Antarctica both do. */
-        var started = false;
-        var firstEntry = null;
-        var pendingExit = null;
+        if (landRings[r].fillable) {
+          var started = false;
+          var firstEntry = null;
+          var pendingExit = null;
 
-        ctx.beginPath();
+          ctx.beginPath();
 
-        for (i = 0; i < n; i++) {
-          j = (i + 1) % n;
+          for (i = 0; i < n; i++) {
+            j = (i + 1) % n;
 
-          if (sz[i] >= 0) {
-            var px = cx + sx[i] * radius;
-            var py = cy - sy[i] * radius;
-            if (started) { ctx.lineTo(px, py); } else { ctx.moveTo(px, py); started = true; }
-          }
-
-          if (sz[i] >= 0 && sz[j] < 0) {
-            var exit = crossing(i, j);
-            ctx.lineTo(exit.x, exit.y);
-            pendingExit = exit.ang;
-          } else if (sz[i] < 0 && sz[j] >= 0) {
-            var entry = crossing(i, j);
-
-            if (pendingExit !== null) {
-              // Rejoin along the limb rather than cutting straight across the disc.
-              ctx.arc(cx, cy, radius, pendingExit, entry.ang, LIMB_CCW);
-              pendingExit = null;
-            } else if (started) {
-              ctx.lineTo(entry.x, entry.y);
-            } else {
-              ctx.moveTo(entry.x, entry.y);
-              started = true;
+            if (sz[i] >= 0) {
+              var px = cx + sx[i] * radius;
+              var py = cy - sy[i] * radius;
+              if (started) { ctx.lineTo(px, py); } else { ctx.moveTo(px, py); started = true; }
             }
 
-            if (firstEntry === null) { firstEntry = entry.ang; }
-          }
-        }
+            if (sz[i] >= 0 && sz[j] < 0) {
+              var exit = crossing(i, j);
+              ctx.lineTo(exit.x, exit.y);
+              pendingExit = exit.ang;
+            } else if (sz[i] < 0 && sz[j] >= 0) {
+              var entry = crossing(i, j);
 
-        if (started) {
-          if (pendingExit !== null && firstEntry !== null) {
-            ctx.arc(cx, cy, radius, pendingExit, firstEntry, LIMB_CCW);
+              if (pendingExit !== null) {
+                // Rejoin along the limb rather than cutting straight across the disc.
+                limbTo(pendingExit, entry.ang);
+                pendingExit = null;
+              } else if (started) {
+                ctx.lineTo(entry.x, entry.y);
+              } else {
+                ctx.moveTo(entry.x, entry.y);
+                started = true;
+              }
+
+              if (firstEntry === null) { firstEntry = entry.ang; }
+            }
           }
-          ctx.closePath();
-          ctx.fill();
+
+          if (started) {
+            if (pendingExit !== null && firstEntry !== null) {
+              limbTo(pendingExit, firstEntry);
+            }
+            ctx.closePath();
+            ctx.fill();
+          }
         }
 
         // Stroke: break at the horizon so no coastline is drawn along the limb where a
@@ -430,6 +467,17 @@
 
         var rgb = regionRGB[p.region] || '255, 255, 255';
         var isHovered = hovered === p.code;
+
+        if (!p.linked) {
+          // Footprint only: a smaller, flatter dot with no halo or ring, so it reads as
+          // context rather than as something to click.
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(' + rgb + ', ' + (alpha * 0.55) + ')';
+          ctx.fill();
+          return;
+        }
+
         var r = isHovered ? 5 : 3.5;
 
         ctx.beginPath();
@@ -448,6 +496,8 @@
         ctx.lineWidth = isHovered ? 1.4 : 1;
         ctx.stroke();
 
+        // Only linked countries go into the returned set, which drives both the label
+        // slots and click hit-testing.
         visible.push({ point: p, x: pt.x, y: pt.y, z: pt.z, alpha: alpha });
       });
 
@@ -743,7 +793,9 @@
     if (list) {
       var order = Object.keys(data.regions);
 
-      var sorted = points.slice().sort(function (a, b) {
+      // Only countries with engagements get a pill — every button here must lead to
+      // something worth reading.
+      var sorted = points.filter(function (p) { return p.linked; }).sort(function (a, b) {
         var byRegion = order.indexOf(a.region) - order.indexOf(b.region);
         return byRegion !== 0 ? byRegion : a.name.localeCompare(b.name);
       });

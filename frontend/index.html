@@ -764,7 +764,6 @@
     color: var(--ink);
     line-height: 1.55;
   }
-  .globe-modal-empty { padding: 26px 0 6px; color: var(--muted); font-size: 15px; line-height: 1.7; }
   .globe-modal-close {
     position: absolute;
     top: 18px;
@@ -981,7 +980,7 @@
               <div class="globe-labels" data-globe-labels></div>
             </div>
           </div>
-          <p class="globe-hint">Drag to spin. Select any marker or country for its engagements.</p>
+          <p class="globe-hint">Drag to spin. Select a highlighted marker, or a country below, for its engagements. Smaller dots show ENAULD's wider footprint.</p>
           <ul class="globe-list" data-globe-list aria-label="Countries where ENAULD has worked"></ul>
         </div>
       </div>
@@ -1391,21 +1390,21 @@
       if (!country) return;
 
       const list = projectsFor(code);
+      // Countries in the wider footprint but with no engagement rows are not clickable
+      // anywhere in the UI; this guard keeps that true for any other caller too.
+      if (!list.length) return;
+
       const region = globe.regions[country.region] || '';
 
       regionEl.innerHTML = `<span class="globe-legend-dot" style="background: var(--region-${esc(country.region)})"></span>${esc(region)}`;
       titleEl.textContent = country.name;
-      countEl.textContent = list.length
-        ? `${list.length} ${list.length === 1 ? 'engagement' : 'engagements'} on record`
-        : 'Wider geographical footprint';
+      countEl.textContent = `${list.length} ${list.length === 1 ? 'engagement' : 'engagements'} on record`;
 
-      bodyEl.innerHTML = list.length
-        ? `<table class="globe-modal-table">
+      bodyEl.innerHTML = `<table class="globe-modal-table">
              <caption class="sr-only">ENAULD engagements in ${esc(country.name)}</caption>
              <thead><tr><th scope="col">Location</th><th scope="col">Agency / Company</th><th scope="col">Description</th></tr></thead>
              <tbody>${rows(list)}</tbody>
-           </table>`
-        : `<p class="globe-modal-empty">Part of ENAULD's wider geographical footprint. Detailed engagement records are published under <a href="#track-record">Track Record</a>.</p>`;
+           </table>`;
 
       lastTrigger = document.activeElement;
       modal.classList.add('open');
