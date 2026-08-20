@@ -24,8 +24,24 @@
   /** How many labels may share the sphere at once before it reads as clutter. */
   var MAX_LABELS = 7;
 
-  /** Past this much movement a press is a spin, not a click. */
-  var CLICK_SLOP = 5;
+  /**
+   * Past this much movement a press is a spin, not a click. A finger wanders several
+   * pixels during an ordinary tap, so touch needs a far looser threshold than a mouse —
+   * at the mouse value, tapping a marker or a label on a phone almost never registers.
+   */
+  var CLICK_SLOP_MOUSE = 5;
+  var CLICK_SLOP_TOUCH = 16;
+
+  function clickSlop(pointerType) {
+    return pointerType === 'mouse' ? CLICK_SLOP_MOUSE : CLICK_SLOP_TOUCH;
+  }
+
+  /** Labels that fit without crowding, by canvas size. */
+  function labelBudget(side) {
+    if (side < 300) { return 3; }
+    if (side < 380) { return 5; }
+    return MAX_LABELS;
+  }
 
   /** Pointer must land this close to a marker centre to select it. */
   var HIT_RADIUS = 14;
@@ -226,6 +242,13 @@
 
       // Leave room for the atmosphere glow so it is never clipped by the canvas edge.
       radius = side / 2 - 20;
+
+      // Label sizing follows the globe, not the viewport: a single-column tablet layout
+      // gives a full-size sphere that should keep full-size pills.
+      container.classList.toggle('is-compact', side < 380);
+
+      // Pill widths depend on the font size, which the class above changes.
+      labelWidth = {};
 
       buildGradients(side / 2, side / 2);
     }
@@ -514,7 +537,8 @@
 
     var labelPool = [];
 
-    /** Rendered pill width per country, measured once when a label first shows that name. */
+    /** Rendered pill width per country, measured once when a label first shows that name.
+     *  Cleared on resize, since the mobile breakpoint changes the pill font size. */
     var labelWidth = {};
 
     if (labelLayer) {
@@ -556,6 +580,8 @@
       visible.forEach(function (v) { byCode[v.point.code] = v; });
 
       var pinned = focusedCode();
+      // Fewer labels on a small canvas; seven pills on a phone-sized globe is a mess.
+      var budget = labelBudget(side);
       var slots = new Array(labelPool.length);
       var placed = [];
       var taken = {};
@@ -569,7 +595,7 @@
 
       // 1. A focused label never moves out from under the keyboard.
       if (pinned && byCode[pinned]) {
-        for (k = 0; k < labelPool.length; k++) {
+        for (k = 0; k < budget; k++) {
           if (labelPool[k].dataset.code === pinned) { claim(k, byCode[pinned]); break; }
         }
       }
@@ -577,7 +603,7 @@
       // 2. Each slot keeps the country it is already showing while that country stays
       //    reasonably visible. Without this the top-N-by-depth set is recomputed every
       //    frame and the pills visibly flick between countries as the globe turns.
-      for (k = 0; k < labelPool.length; k++) {
+      for (k = 0; k < budget; k++) {
         if (slots[k]) { continue; }
         var held = labelPool[k].dataset.code;
         var v = held && !taken[held] ? byCode[held] : null;
@@ -591,7 +617,7 @@
         .filter(function (v) { return !taken[v.point.code] && v.alpha > 0.5; })
         .sort(function (a, b) { return b.z - a.z; });
 
-      for (k = 0; k < labelPool.length; k++) {
+      for (k = 0; k < budget; k++) {
         if (slots[k]) { continue; }
         for (var i = 0; i < candidates.length; i++) {
           var c = candidates[i];
@@ -698,7 +724,11 @@
         || document.body.classList.contains('globe-modal-open');
     }
 
-    container.addEventListener('pointerenter', function () { hoverPause = true; });
+    // Only a mouse hovers. On touch, pointerenter fires on tap and the matching
+    // pointerleave often never arrives, which would freeze the globe after one tap.
+    container.addEventListener('pointerenter', function (event) {
+      if (event.pointerType === 'mouse') { hoverPause = true; }
+    });
     container.addEventListener('pointerleave', function () {
       hoverPause = false;
       hovered = null;
@@ -706,7 +736,12 @@
     });
 
     container.addEventListener('pointerdown', function (event) {
-      down = { x: event.clientX, y: event.clientY, id: event.pointerId };
+      down = {
+        x: event.clientX,
+        y: event.clientY,
+        id: event.pointerId,
+        slop: clickSlop(event.pointerType),
+      };
       dragX = event.clientX;
       dragging = false;
       dragged = false;
@@ -721,6 +756,8 @@
 
     container.addEventListener('pointermove', function (event) {
       if (!down) {
+        // Hover highlighting is a mouse affordance; a touch "move" is a gesture.
+        if (event.pointerType !== 'mouse') { return; }
         var over = markerAt(event);
         hovered = over;
         container.classList.toggle('is-clickable', !!over);
@@ -729,7 +766,7 @@
 
       if (!dragging) {
         var moved = Math.abs(event.clientX - down.x) + Math.abs(event.clientY - down.y);
-        if (moved <= CLICK_SLOP) { return; }
+        if (moved <= down.slop) { return; }
 
         // Capture only once this is definitely a drag. Capturing on pointerdown would
         // retarget the following click away from the label button that was pressed.

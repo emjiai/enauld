@@ -600,6 +600,14 @@
   /* Required: the display rule above is an author style and would otherwise beat the
      UA's [hidden] { display: none }, leaving unused pills frozen on the globe. */
   .globe-label[hidden] { display: none; }
+  /* Smaller pills on a small sphere. globe.js sets .is-compact from the canvas size, not
+     the viewport, and independently drops the label count from seven to five or three. */
+  .globe.is-compact .globe-label {
+    font-size: 9px;
+    padding: 2px 7px;
+    transform: translate(9px, -50%);
+  }
+  .globe.is-compact .globe-label.is-flipped { transform: translate(calc(-100% - 9px), -50%); }
   .globe-label.is-flipped { transform: translate(calc(-100% - 12px), -50%); }
   .globe-label:hover, .globe-label:focus-visible { background: var(--burgundy); color: var(--white); }
   .globe-label:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
@@ -841,6 +849,10 @@
     .capacity-stats .feature { padding: 16px 12px; }
     .capacity-stats .feature h3 { font-size: 26px; }
     .capacity-stats .feature p { font-size: 10px; letter-spacing: 0.05em; }
+    /* Taller than desktop so the country list reads as a list, not a sliver. */
+    .globe-list { max-height: 168px; gap: 5px; }
+    .globe-list-item { font-size: 11px; padding: 5px 9px; }
+    .globe-hint { margin-top: 14px; padding-top: 14px; font-size: 11px; }
     .globe-modal { padding: 16px; }
     .globe-modal-head { padding: 22px 20px 16px; }
     .globe-modal-head h3 { font-size: 25px; padding-right: 44px; }
