@@ -156,7 +156,7 @@
     const metaItems = [
       ['Period', project.period],
       ['Location', project.location],
-      ['Client / agency', project.agency],
+      ['Client / agency', project.agencyFull || project.agency],
       ['Role', project.position]
     ].filter(([, v]) => v).map(([k, v]) => `
       <div class="meta-item"><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`).join('');

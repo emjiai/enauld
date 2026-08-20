@@ -49,6 +49,18 @@
     --border: #e5e8ef;
     --border-light: #eef0f5;
     --success: #18794e;
+    /* Globe region palette — mirrors the legend in documentation/image.png, desaturated
+       slightly to sit against the navy globe card. Read at runtime by globe.js. */
+    --region-west-africa: #7fbf5a;
+    --region-north-africa: #f2cf5b;
+    --region-central-africa: #a985d8;
+    --region-east-africa: #6cc9bd;
+    --region-southern-africa: #f0a05a;
+    --region-middle-east: #ee7f74;
+    --region-asia: #4a86d6;
+    --region-north-america: #f08c3a;
+    --region-europe: #8e6bd0;
+    --region-indian-ocean: #d95fa0;
     --serif: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --sans: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
@@ -506,6 +518,278 @@
     align-items: center;
   }
   footer .brand-logo { width: 132px; }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  /* ---- Organizational Capacity + globe (see globe.js) ---- */
+  .capacity-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .capacity-stats { margin-top: 34px; }
+  .capacity-stats .feature { padding: 22px 24px; background: var(--white); }
+  .capacity-stats .feature h3 {
+    font-family: var(--serif);
+    font-size: 34px;
+    line-height: 1.1;
+    color: var(--navy);
+    margin-bottom: 2px;
+  }
+  .capacity-stats .feature p {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  /* One dark card, not a dark section — the page stays light. */
+  .capacity-globe-card {
+    background: var(--navy);
+    border-radius: 8px;
+    padding: 28px;
+    color: var(--white);
+    overflow: hidden;
+    /* Spinning the globe is a drag gesture; without this it also drags a text
+       selection across the labels and legend, which flashes over the card. */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .globe {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    cursor: grab;
+    /* Without this, drag-to-spin swallows vertical page scrolling on touch. */
+    touch-action: pan-y;
+  }
+  .globe:active { cursor: grabbing; }
+  /* Set by globe.js while the pointer is over a country marker. */
+  .globe.is-clickable { cursor: pointer; }
+  .globe canvas, .globe-label { -webkit-user-drag: none; }
+  .globe-stage { position: relative; line-height: 0; }
+  .globe canvas { display: block; max-width: 100%; }
+  .globe-labels { position: absolute; inset: 0; pointer-events: none; line-height: 1; }
+  .globe-label {
+    position: absolute;
+    transform: translate(12px, -50%);
+    display: inline-block;
+    white-space: nowrap;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(7, 17, 36, 0.74);
+    backdrop-filter: blur(3px);
+    padding: 3px 10px;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.94);
+    pointer-events: auto;
+    cursor: pointer;
+    transition: background-color 0.18s ease, color 0.18s ease;
+  }
+  /* Required: the display rule above is an author style and would otherwise beat the
+     UA's [hidden] { display: none }, leaving unused pills frozen on the globe. */
+  .globe-label[hidden] { display: none; }
+  .globe-label.is-flipped { transform: translate(calc(-100% - 12px), -50%); }
+  .globe-label:hover, .globe-label:focus-visible { background: var(--burgundy); color: var(--white); }
+  .globe-label:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+  /* Still used by the country pills and the modal's region eyebrow. */
+  .globe-legend-dot { width: 8px; height: 8px; border-radius: 999px; flex-shrink: 0; }
+  .globe-hint {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.14);
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+  }
+  /* The canvas can legibly hold ~7 labels; this list carries every country and is
+     the keyboard and screen-reader route into the same modal. */
+  .globe-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+    max-height: 116px;
+    overflow-y: auto;
+    padding-right: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.3) transparent;
+  }
+  .globe-list::-webkit-scrollbar { width: 6px; }
+  .globe-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.24); border-radius: 999px; }
+  .globe-list-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.09);
+    color: rgba(255,255,255,0.9);
+    padding: 5px 11px;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.16s ease;
+  }
+  .globe-list-item:hover, .globe-list-item:focus-visible { background: var(--burgundy); color: var(--white); }
+  .globe-list-item:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+  /* ---- Country engagement modal ---- */
+  .globe-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    background: rgba(8,12,24,0.82);
+    backdrop-filter: blur(4px);
+  }
+  .globe-modal.open { display: flex; }
+  .globe-modal-panel {
+    position: relative;
+    width: 100%;
+    max-width: 940px;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .globe-modal-head {
+    padding: 26px 30px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--soft);
+  }
+  .globe-modal-region {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .globe-modal-head h3 { font-family: var(--serif); font-size: 32px; line-height: 1.1; color: var(--navy); }
+  .globe-modal-count { font-size: 14px; color: var(--muted); margin-top: 4px; }
+  .globe-modal-body { padding: 4px 30px 30px; overflow-y: auto; }
+  .globe-modal-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .globe-modal-table th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    padding: 18px 14px 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .globe-modal-table td {
+    vertical-align: top;
+    padding: 16px 14px 16px 0;
+    border-bottom: 1px solid var(--border-light);
+    line-height: 1.6;
+  }
+  .globe-modal-table td:first-child { font-weight: 700; color: var(--navy); width: 17%; }
+  .globe-modal-table td:nth-child(2) { color: var(--ink); width: 24%; }
+  .globe-modal-table a { color: var(--burgundy); text-decoration: underline; text-underline-offset: 3px; }
+  .globe-modal-desc { display: block; color: var(--ink); }
+  .globe-modal-period { display: block; font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .globe-modal-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--burgundy);
+    text-decoration: none;
+  }
+  .globe-modal-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .globe-modal-activities { margin-top: 10px; }
+  .globe-modal-activities summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    list-style: none;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--navy);
+  }
+  .globe-modal-activities summary::-webkit-details-marker { display: none; }
+  /* Drawn with borders rather than a glyph — Outfit has no triangle. */
+  .globe-modal-activities summary::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 5px solid var(--burgundy);
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    transition: transform 0.15s ease;
+  }
+  .globe-modal-activities[open] summary::before { transform: rotate(90deg); }
+  .globe-modal-activities summary:hover { color: var(--burgundy); }
+  .globe-modal-activities ul {
+    list-style: none;
+    display: grid;
+    gap: 7px;
+    margin: 10px 0 0;
+    padding-left: 14px;
+    border-left: 2px solid var(--border);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .globe-modal-activities li { line-height: 1.55; }
+  .globe-modal-result {
+    margin-top: 10px;
+    padding-left: 14px;
+    border-left: 2px solid var(--burgundy);
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .globe-modal-empty { padding: 26px 0 6px; color: var(--muted); font-size: 15px; line-height: 1.7; }
+  .globe-modal-close {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--navy);
+    cursor: pointer;
+  }
+  .globe-modal-close:hover { background: var(--pale); }
+  .globe-modal-close svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+  /* Nine nav links no longer fit at the narrowest desktop width, so tighten the bar
+     before the mobile menu takes over at 1040px. */
+  @media (max-width: 1200px) {
+    .nav { padding: 0 28px; }
+    .nav-links { gap: 16px; }
+    .nav-links a { white-space: nowrap; }
+  }
   @media (max-width: 1040px) {
     .nav { padding: 0 20px; }
     .nav-links, .nav > a.button { display: none; }
@@ -538,6 +822,7 @@
     .section-head { flex-direction: column; }
     .service-grid, .track-grid { grid-template-columns: 1fr; }
     .team-card { position: static; }
+    .capacity-grid { grid-template-columns: 1fr; gap: 40px; }
     .gallery-track img { flex-basis: calc((100% - 36px) / 4); height: 110px; }
   }
   @media (max-width: 760px) {
@@ -545,7 +830,7 @@
     .hero { padding: 122px 20px 74px; }
     .section { padding: 68px 20px; }
     .hero-copy { font-size: 17px; }
-    .stats-card, .card, .team-card, .project, .highlight, .contact-panel { padding: 24px; }
+    .stats-card, .card, .team-card, .project, .highlight, .contact-panel, .capacity-globe-card { padding: 24px; }
     .stat { grid-template-columns: 82px 1fr; gap: 12px; }
     .stat-value { font-size: 29px; }
     .stat.registration .stat-value { font-size: 18px; }
@@ -553,6 +838,32 @@
     .gallery-track img { flex-basis: calc((100% - 12px) / 2); height: 120px; }
     .publication { grid-template-columns: 1fr; gap: 10px; padding: 20px; }
     .footer-inner { align-items: flex-start; flex-direction: column; }
+    .capacity-stats { grid-template-columns: repeat(3, 1fr); }
+    .capacity-stats .feature { padding: 16px 12px; }
+    .capacity-stats .feature h3 { font-size: 26px; }
+    .capacity-stats .feature p { font-size: 10px; letter-spacing: 0.05em; }
+    .globe-modal { padding: 16px; }
+    .globe-modal-head { padding: 22px 20px 16px; }
+    .globe-modal-head h3 { font-size: 25px; padding-right: 44px; }
+    .globe-modal-body { padding: 4px 20px 24px; }
+    /* Three columns cannot survive 360px, so each cell stacks under its own header. */
+    .globe-modal-table, .globe-modal-table tbody, .globe-modal-table tr, .globe-modal-table td { display: block; width: auto; }
+    .globe-modal-table thead { display: none; }
+    .globe-modal-table tr { padding: 18px 0; border-bottom: 1px solid var(--border); }
+    .globe-modal-table tr:last-child { border-bottom: 0; }
+    .globe-modal-table td { border-bottom: 0; padding: 0 0 10px; width: auto; }
+    .globe-modal-table td:last-child { padding-bottom: 0; }
+    .globe-modal-table td:first-child, .globe-modal-table td:nth-child(2) { width: auto; }
+    .globe-modal-table td::before {
+      content: attr(data-th);
+      display: block;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
   }
 </style>
 <script type="application/ld+json">
@@ -573,6 +884,7 @@
   </a>
   <div class="nav-links">
     <a href="#about">About</a>
+    <a href="#capacity">Capacity</a>
     <a href="#services">Services</a>
     <a href="#health">Health</a>
     <a href="#imt">IMT</a>
@@ -589,6 +901,7 @@
 </nav>
 <div class="mobile-menu" id="mobile-menu">
   <a href="#about">About</a>
+  <a href="#capacity">Capacity</a>
   <a href="#services">Services</a>
   <a href="#health">Health</a>
   <a href="#imt">IMT</a>
@@ -626,7 +939,7 @@
         <div>
           <div class="label">About ENAULD</div>
           <h2>A consultancy built around evidence, learning and decision-making.</h2>
-          <img class="about-image" src="public/enuald_1.webp" alt="ENAULD" width="736" height="736" loading="lazy" decoding="async" fetchpriority="low">
+          <img class="about-image" src="public/enuald_2.webp" alt="ENAULD" width="736" height="736" loading="lazy" decoding="async" fetchpriority="low">
         </div>
         <div>
           <p class="lead">ENAULD Technology Health Research and Services was established in November 2010 as ENAULD Health Research and Services. In October 2021 the company restructured to integrate a technology component, reflecting the growing role of data and information systems in evaluation work.</p>
@@ -642,7 +955,40 @@
     </div>
   </section>
 
-  <section class="section soft" id="services">
+  <section class="section soft" id="capacity">
+    <div class="container">
+      <div class="label">Organizational Capacity</div>
+      <div class="section-head">
+        <h2>Evidence delivered across more than 50 countries.</h2>
+        <p>Evaluations, assessments and applied research for WHO, UNICEF, WFP, the World Bank, Gavi, AHPSR, 3ie and the Bill &amp; Melinda Gates Foundation.</p>
+      </div>
+      <div class="capacity-grid">
+        <div class="capacity-copy">
+          <p class="lead">ENAULD, led by Dr. Ngozi Akwataghibe, has successfully delivered high-quality evaluations, assessments and applied research for WHO, UNICEF, WFP, the World Bank, Gavi the Vaccine Alliance, the Alliance for Health Policy and Systems Research (AHPSR), 3ie, the Bill &amp; Melinda Gates Foundation and other international development partners across more than 50 countries.</p>
+          <p class="lead">Its portfolio spans diverse development, humanitarian, fragile, conflict-affected and resource-constrained contexts across Africa, Asia, the Middle East, Europe and Latin America.</p>
+          <p class="lead">ENAULD's operational model combines global expertise with strong national partnerships, ensuring contextual relevance, local ownership, and safe, ethical field engagement.</p>
+          <div class="feature-grid capacity-stats">
+            <article class="feature"><h3 data-capacity-count="countries">50+</h3><p>Countries</p></article>
+            <article class="feature"><h3 data-capacity-count="projects">34</h3><p>Engagements</p></article>
+            <article class="feature"><h3 data-capacity-count="regions">10</h3><p>Regions</p></article>
+          </div>
+        </div>
+
+        <div class="capacity-globe-card">
+          <div class="globe" data-globe>
+            <div class="globe-stage" data-globe-stage>
+              <canvas role="img" aria-label="Rotating globe showing the countries where ENAULD has worked. The full list follows below."></canvas>
+              <div class="globe-labels" data-globe-labels></div>
+            </div>
+          </div>
+          <p class="globe-hint">Drag to spin. Select any marker or country for its engagements.</p>
+          <ul class="globe-list" data-globe-list aria-label="Countries where ENAULD has worked"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="services">
     <div class="container">
       <div class="label">Services</div>
       <div class="section-head">
@@ -801,6 +1147,20 @@
   </figure>
 </div>
 
+<div class="globe-modal" id="globe-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="globe-modal-title">
+  <div class="globe-modal-panel">
+    <button class="globe-modal-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+    <header class="globe-modal-head">
+      <span class="globe-modal-region" id="globe-modal-region"></span>
+      <h3 id="globe-modal-title"></h3>
+      <p class="globe-modal-count" id="globe-modal-count"></p>
+    </header>
+    <div class="globe-modal-body" id="globe-modal-body"></div>
+  </div>
+</div>
+
 <footer>
   <div class="footer-inner">
     <a class="brand" href="#home" aria-label="ENAULD home">
@@ -811,6 +1171,7 @@
 </footer>
 
 <script src="projects-data.js"></script>
+<script src="globe-data.js"></script>
 <script>
   // Render Track Record cards from the shared project data.
   (function renderTrackRecord() {
@@ -969,6 +1330,108 @@
     }
   })();
 
+  // Country engagement modal, opened from the globe (globe.js calls ENAULD_OPEN_COUNTRY).
+  (function globeModal() {
+    const globe = window.ENAULD_GLOBE;
+    const modal = document.getElementById('globe-modal');
+    if (!globe || !modal) return;
+
+    const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]
+    ));
+
+    const regionEl = document.getElementById('globe-modal-region');
+    const titleEl = document.getElementById('globe-modal-title');
+    const countEl = document.getElementById('globe-modal-count');
+    const bodyEl = document.getElementById('globe-modal-body');
+    const closeButton = modal.querySelector('.globe-modal-close');
+    let lastTrigger = null;
+
+    // Live counts, so the stat strip can never drift from the data behind the globe.
+    const projects = Array.isArray(window.ENAULD_PROJECTS) ? window.ENAULD_PROJECTS : [];
+    const counts = {
+      countries: Object.keys(globe.countries).length,
+      projects: projects.length,
+      regions: Object.keys(globe.regions).length,
+    };
+    document.querySelectorAll('[data-capacity-count]').forEach((el) => {
+      const value = counts[el.dataset.capacityCount];
+      if (value) el.textContent = String(value);
+    });
+
+    const projectsFor = (code) => projects.filter((p) => (p.countries || []).indexOf(code) !== -1);
+
+    function rows(list) {
+      return list.map((p) => {
+        const activities = Array.isArray(p.activities) ? p.activities : [];
+        // Collapsed by default: Nigeria alone carries 13 engagements and 51 activity
+        // lines, which would bury the three columns the table exists to show.
+        const detail = activities.length ? `
+            <details class="globe-modal-activities">
+              <summary>Activities</summary>
+              <ul>${activities.map((a) => `<li>${esc(a)}</li>`).join('')}</ul>
+              ${p.result ? `<p class="globe-modal-result">${esc(p.result)}</p>` : ''}
+            </details>` : '';
+
+        return `
+        <tr>
+          <td data-th="Location">${esc(p.location)}</td>
+          <td data-th="Agency / Company">${esc(p.agencyFull || p.agency)}</td>
+          <td data-th="Description">
+            <span class="globe-modal-desc">${esc(p.description || p.summary)}</span>
+            <span class="globe-modal-period">${esc(p.period)}</span>
+            <a class="globe-modal-link" href="project.html#${encodeURIComponent(p.slug)}" target="_blank" rel="noopener noreferrer">View project →</a>${detail}
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    function open(code) {
+      const country = globe.countries[code];
+      if (!country) return;
+
+      const list = projectsFor(code);
+      const region = globe.regions[country.region] || '';
+
+      regionEl.innerHTML = `<span class="globe-legend-dot" style="background: var(--region-${esc(country.region)})"></span>${esc(region)}`;
+      titleEl.textContent = country.name;
+      countEl.textContent = list.length
+        ? `${list.length} ${list.length === 1 ? 'engagement' : 'engagements'} on record`
+        : 'Wider geographical footprint';
+
+      bodyEl.innerHTML = list.length
+        ? `<table class="globe-modal-table">
+             <caption class="sr-only">ENAULD engagements in ${esc(country.name)}</caption>
+             <thead><tr><th scope="col">Location</th><th scope="col">Agency / Company</th><th scope="col">Description</th></tr></thead>
+             <tbody>${rows(list)}</tbody>
+           </table>`
+        : `<p class="globe-modal-empty">Part of ENAULD's wider geographical footprint. Detailed engagement records are published under <a href="#track-record">Track Record</a>.</p>`;
+
+      lastTrigger = document.activeElement;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      // Locks page scroll, and tells globe.js to hold still behind the overlay.
+      document.body.classList.add('menu-open', 'globe-modal-open');
+      closeButton.focus();
+    }
+
+    function close() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('menu-open', 'globe-modal-open');
+      if (lastTrigger && document.contains(lastTrigger)) lastTrigger.focus();
+      lastTrigger = null;
+    }
+
+    closeButton.addEventListener('click', close);
+    modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) close();
+    });
+
+    window.ENAULD_OPEN_COUNTRY = open;
+  })();
+
   const menuButton = document.querySelector('.menu-button');
   const mobileMenu = document.querySelector('#mobile-menu');
   menuButton.addEventListener('click', () => {
@@ -986,5 +1449,6 @@
     });
   });
 </script>
+<script src="globe.js"></script>
 </body>
 </html>
