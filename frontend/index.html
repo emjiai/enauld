@@ -518,6 +518,9 @@
     align-items: center;
   }
   footer .brand-logo { width: 132px; }
+  .powered-by { margin-top: 6px; font-size: 13px; color: rgba(255,255,255,0.6); }
+  .powered-by a { color: var(--white); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.4); }
+  .powered-by a:hover { border-bottom-color: var(--white); }
   .sr-only {
     position: absolute;
     width: 1px;
@@ -1177,7 +1180,10 @@
     <a class="brand" href="#home" aria-label="ENAULD home">
       <img class="brand-logo" src="public/enauld_logo_t.png" alt="ENAULD">
     </a>
-    <div>&copy;2026 ENAULD Technology Health Research and Services</div>
+    <div>
+      <div>&copy;2026 ENAULD Technology Health Research and Services</div>
+      <div class="powered-by">Powered by <a href="https://www.theworkerbulls.co.uk/Contact.html" target="_blank" rel="noopener noreferrer">WorkerBull</a></div>
+    </div>
   </div>
 </footer>
 
